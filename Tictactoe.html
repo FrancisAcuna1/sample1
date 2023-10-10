@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+</head>
+<body>
+	<h1 class="text-center">GROUP 4 </h1>
+	<h1 class="text-center">TIC TAC TOE</h1>
+	<br>
+	<h2 class="text-center mt-2 text-success" id='status'></h2>
+	<div class="container">
+		<div class="row mt-4" style="height: 100px;">
+			<div class="col-2 text-center p-2 border border-secondary border-left-0 border-top-0 display-4" onclick="play(this)">
+			</div>
+			<div class="col-2 text-center p-2 border border-secondary border-top-0 display-4" onclick="play(this)">
+			</div>
+			<div class="col-2 text-center p-2 border border-secondary border-right-0 border-top-0 display-4" onclick="play(this)">
+			</div>
+
+		</div>
+		<div class="row" style="height: 100px;">
+			<div class="col-2 text-center p-2 border border-secondary border-left-0 display-4" onclick="play(this)">
+			</div>
+			<div class="col-2 text-center p-2 border border-secondary display-4" onclick="play(this)">
+			</div>
+			<div class="col-2 text-center p-2 border border-secondary border-right-0 display-4" onclick="play(this)">
+			</div>
+
+		</div>
+		<div class="row" style="height: 100px;">
+			<div class="col-2 text-center p-2 border border-secondary border-left-0 border-bottom-0 display-4" onclick="play(this)">
+			</div>
+			<div class="col-2 text-center p-2 border border-secondary border-bottom-0 display-4" onclick="play(this)">
+			</div>
+			<div class="col-2 text-center p-2 border border-secondary border-right-0 border-bottom-0 display-4" onclick="play(this)">
+			</div>
+
+		</div>
+		<div class="row mt-4 ">
+			<div class='col-5 text-center p-5 mb-3 rounded-lg border border-secondary shadow-lg rounded'>
+					<h2 class='text-center mb-4' id='msg'></h2>
+					<div class="text-center h4">(X) Player 1</div>
+					<div class="text-center h4">(O) Player 2</div>
+					<button type="button" onclick="reset()" class="btn btn-success">Restart</button>
+
+			</div>
+		</div>
+	</div>
+
+	<style type="text/css">
+		body{
+			background-color: #EDC6B1 ;
+			justify-content: center;
+			font-family: "Permanent Marker", cursive;
+		}
+		.row{
+			justify-content: center;
+			font-family: "Permanent Marker", cursive;
+		}
+	</style>
+
+	<script type="text/javascript">
+	let currentPlayer = 'X';
+	const win = document.querySelector('#status');
+	const boxes = document.querySelectorAll('.col-2');
+	const message = document.querySelector('#msg');
+	
+	for (let i = 0; i < boxes.length; i++) {
+	    boxes[i].textContent = '';
+	    boxes[i].style.background = '';
+	    boxes[i].style.color = '';
+	}
+
+	function play(box) {
+	  if (!box.textContent) {
+	    box.textContent = currentPlayer;
+	    box.style.color = (currentPlayer === 'X') ? '#3f51b5' : '#f44336';
+	    checkWinner();
+	    currentPlayer = (currentPlayer === 'X') ? 'O' : 'X';
+	  	message.textContent = `${currentPlayer}'s turn`;
+	  }
+
+	}
+
+	function checkWinner() {
+	  const winningPatterns = [
+	    [0,1,2],
+		[3,4,5],
+		[6,7,8],
+		[0,3,6],
+		[1,4,7],
+		[2,5,8],
+		[0,4,8],
+		[2,4,6]
+	  ];
+
+	  for (let i = 0; i < winningPatterns.length; i++) {
+	    const [a, b, c] = winningPatterns[i];
+	    if (boxes[a].textContent && (boxes[a].textContent === boxes[b].textContent && boxes[a].textContent === boxes[c].textContent)) {
+	      	boxes[a].style.background = boxes[b].style.background = boxes[c].style.background = 'lightgreen';
+	      	disableClick();
+	      	if (currentPlayer == "X"){
+	      		win.textContent = 'Player X Wins!';
+	      	}else if (currentPlayer == 'O'){
+	      		win.textContent = 'Player O Wins!';
+	      	}
+	      	return false;
+		}
+
+	  }
+	  if (isTie()){
+			win.textContent = `It's a tie!`;
+			disableClick();
+			return true;
+		}
+
+	}
+
+	function isTie() {
+	  let tie = true;
+	  for (let i = 0; i < boxes.length; i++) {
+	    if (!boxes[i].textContent) {
+	      tie = false;
+	      break;
+	    }
+	  }
+	  return tie;
+	}
+
+	function disableClick() {
+	  for (let i = 0; i < boxes.length; i++) {
+	    boxes[i].removeAttribute('onclick');
+	  }
+	}
+
+	function reset() {	
+	  for (let i = 0; i < boxes.length; i++) {
+	    boxes[i].textContent = '';
+	    boxes[i].style.background = '';
+	    boxes[i].style.color = '';
+	    boxes[i].setAttribute('onclick', 'play(this)');
+	  }
+	  currentPlayer = 'X';
+	  message.textContent = `${currentPlayer}'s turn`;
+	  win.textContent = '';
+	}
+
+	message.textContent = `${currentPlayer}'s turn`;
+	
+
+	</script>
+
+
+
+
+</body>
+</html>
